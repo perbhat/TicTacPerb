@@ -117,7 +117,10 @@ export function Board(props) {
     else if(boardIsFull()){
         return (
             
+            <>
             <h1> DRAW </h1>
+            <button onClick={resetGame}>Play Again?</button>
+            </>
             
             )
     }
