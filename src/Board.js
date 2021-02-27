@@ -3,6 +3,7 @@ import './Board.css';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 import { Box } from './Box.js'
+import { Winner } from './Winner.js'
 
 
 const socket = io();
@@ -86,8 +87,12 @@ export function Board(props) {
     
     if(calculateWinner(boardState) != null){
         
-        return calculateWinner(boardState) == 'X' ? <h1> {playerX} WINS </h1> : <h1> {playerO} WINS </h1>
-        
+        const winner = calculateWinner(boardState) == 'X' ? playerX : playerO
+        return(
+            
+            <Winner winner={winner}/>
+            
+            )
         // return (
             
         //     <h1> {calculateWinner(boardState)} WINS </h1>

@@ -10,6 +10,7 @@ const socket = io();
 function App() {
   
   const [thisUser, updateUser] = useState('')
+  const [userName, updateName] = useState('')
   
   const [userMap, updateUsers] = useState({
     playerX: '',
@@ -20,6 +21,7 @@ function App() {
   
   
   const inputUser = useRef('');
+  
 
   
   function onButtonClick(){
@@ -39,6 +41,7 @@ function App() {
       updateUser(oldUser => 's')
     }
     updateUsers(copy);
+    updateName(user)
     
     
     
@@ -58,7 +61,10 @@ function App() {
 // If inputUser = playerX name then playerX boolean is True. Pass xTrue to board and if xTrue then only X, if xFalse, then only O. Then have a bool for can Turn after each time the array is updated. Opposites in the socket method maybe
   
   
-  if(userMap.playerX == '' || userMap.playerO == ''){
+  
+  
+  
+  if(thisUser == ''){
     return(
       <>
       <input type='text' ref={inputUser}/>
@@ -67,6 +73,13 @@ function App() {
       )
     
   }
+  
+  else if(userMap.playerX == '' || userMap.playerO == ''){
+    return(
+      <h1>Welcome user {userName} </h1>
+      ) 
+  }
+  
   
   
   else{
