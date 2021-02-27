@@ -42,10 +42,22 @@ def on_chat(data): # data is whatever arg you pass in your emit call on client
 def on_update(data):
     print(str(data))
     socketio.emit('turn', data,  broadcast=True, include_self=False)
+    
+    
+@socketio.on('login')
+def on_login(data):
+    print("Something Happened")
+    # print(#str(data))
+    socketio.emit('login', data, broadcast=True, include_self=False)
+
 
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),
     port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    debug=True
 )
+
+
+
