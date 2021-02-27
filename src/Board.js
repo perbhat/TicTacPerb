@@ -28,21 +28,25 @@ export function Board(props) {
     
     
     function onClickDiv(idx){
-        if(props.player == 's' || props.player == '' || !canTurn){
+        if(boardState[idx] == null){
+            if(props.player == 's' || props.player == '' || !canTurn){
+                return
+            }
+    
+            const tempArr = [...boardState]
+            const newVal = !nextVal
+            
+                tempArr[idx] = props.player == 'X' ? 'X' : 'O'
+                changeNext(prevVal => newVal)
+                changeState(prevList => tempArr)
+            
+            socket.emit('turn', { board: tempArr, moveBool: newVal});
+            canIt(prevVal => !prevVal)
+            console.log("Move Sent")
+            }
+        else{
             return
         }
-
-        const tempArr = [...boardState]
-        const newVal = !nextVal
-        if(boardState[idx] == null){
-            tempArr[idx] = props.player == 'X' ? 'X' : 'O'
-            changeNext(prevVal => newVal)
-            changeState(prevList => tempArr)
-        }
-        socket.emit('turn', { board: tempArr, moveBool: newVal});
-        canIt(prevVal => !prevVal)
-        console.log("Move Sent")
-   
         
     }
         
