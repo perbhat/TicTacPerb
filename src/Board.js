@@ -24,6 +24,12 @@ export function Board(props) {
     console.log(canTurn)
     
     
+    function resetGame(){
+        changeState(prevVal => Array(9).fill(null))
+        canIt(prevVal => initialTurn)
+    }
+    
+    
     
     
     
@@ -89,12 +95,16 @@ export function Board(props) {
         
     }
     
+    
+    
     if(calculateWinner(boardState) != null){
         
         const winner = calculateWinner(boardState) == 'X' ? playerX : playerO
         return(
-            
+            <>
             <Winner winner={winner}/>
+            <button onClick={resetGame}>Play Again?</button>
+            </>
             
             )
         // return (
