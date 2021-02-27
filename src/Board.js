@@ -13,13 +13,21 @@ export function Board(props) {
     
     const[nextVal, changeNext] = useState(true);
     
+    const playerX = props.playerX
+    const playerO = props.playerO
+    
+    const initialTurn = props.player == 'X' ? true : false
+    
+    const[canTurn, canIt] = useState(initialTurn)
 
+    console.log(canTurn)
+    
     
     
     
     
     function onClickDiv(idx){
-        if(props.player == 's' || props.player == ''){
+        if(props.player == 's' || props.player == '' || !canTurn){
             return
         }
 
@@ -31,6 +39,7 @@ export function Board(props) {
             changeState(prevList => tempArr)
         }
         socket.emit('turn', { board: tempArr, moveBool: newVal});
+        canIt(prevVal => !prevVal)
         console.log("Move Sent")
    
         
@@ -45,6 +54,7 @@ export function Board(props) {
             // console.log(currentState)
             changeNext(prevVal => moveState)
             changeState(prevList => currentState)
+            canIt(prevVal => !prevVal)
 
             });
          }, []);
@@ -75,11 +85,14 @@ export function Board(props) {
     }
     
     if(calculateWinner(boardState) != null){
-        return (
+        
+        return calculateWinner(boardState) == 'X' ? <h1> {playerX} WINS </h1> : <h1> {playerO} WINS </h1>
+        
+        // return (
             
-            <h1> {calculateWinner(boardState)} WINS </h1>
+        //     <h1> {calculateWinner(boardState)} WINS </h1>
             
-            )
+        //     )
     }
     
     else if(boardIsFull()){
