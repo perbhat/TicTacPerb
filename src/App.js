@@ -76,7 +76,13 @@ function App() {
   
   else if(userMap.playerX == '' || userMap.playerO == ''){
     return(
-      <h1>Welcome user {userName} </h1>
+      
+      <>
+        <h3>PlayerX: {userMap.playerX}</h3>
+        <h3>PlayerO: {userMap.playerO}</h3>
+        <h3>Spectators:</h3>
+        {userMap.spectators.map((item) => <h3>{item}</h3>)}
+      </>
       ) 
   }
   

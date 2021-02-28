@@ -25,9 +25,22 @@ export function Board(props) {
     
     
     function resetGame(){
-        changeState(prevVal => Array(9).fill(null))
-        canIt(prevVal => initialTurn)
+        let temp = Array(9).fill(null)
+        changeState(prevVal => temp)
+        let tempTurn = initialTurn
+        canIt(prevVal => tempTurn)
+
+        // socket.emit('reset', { board: tempTurn});
     }
+    // useEffect(() => {
+    // socket.on('reset', (data) => {
+    //     const boardReset = data.board
+    //     changeState(prevVal => boardReset)
+    //     canIt(prev=> initialTurn)
+    //     });
+    //  }, []);
+
+    
     
     
     

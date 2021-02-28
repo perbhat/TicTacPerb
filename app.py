@@ -51,6 +51,12 @@ def on_login(data):
     socketio.emit('login', data, broadcast=True, include_self=False)
 
 
+@socketio.on('reset')
+def on_reset(data):
+    print('reset')
+    socketio.emit('reset', data, broadcast=True, include_self=False)
+
+
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 socketio.run(
     app,
