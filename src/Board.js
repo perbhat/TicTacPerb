@@ -12,7 +12,7 @@ export function Board(props) {
     
     const [boardState, changeState] = useState(Array(9).fill(null));
     
-    const[nextVal, changeNext] = useState(true);
+    // const[nextVal, changeNext] = useState(true);
     
     const playerX = props.playerX
     const playerO = props.playerO
@@ -23,27 +23,31 @@ export function Board(props) {
 
     console.log(canTurn)
     
+    // const[restart, chngRstart] = useState(false)
+    
+    // function resetHelper(){
+    //     socket.emit('reset', { reset: true});
+        
+    // }
+    
+    // useEffect(() => {
+    // socket.on('reset', (data) => {
+        
+    //     let ifReset = data.reset;
+    //     chngRstart(prev=>ifReset)
+        
+    //  }, []);
+    
     
     function resetGame(){
         let temp = Array(9).fill(null)
         changeState(prevVal => temp)
-        let tempTurn = initialTurn
-        canIt(prevVal => tempTurn)
-
-        // socket.emit('reset', { board: tempTurn});
+        // let tempTurn = initialTurn
+        // canIt(prevVal => tempTurn)
+        
+        
     }
-    // useEffect(() => {
-    // socket.on('reset', (data) => {
-    //     const boardReset = data.board
-    //     changeState(prevVal => boardReset)
-    //     canIt(prev=> initialTurn)
-    //     });
-    //  }, []);
 
-    
-    
-    
-    
     
     
     function onClickDiv(idx){
@@ -53,13 +57,12 @@ export function Board(props) {
             }
     
             const tempArr = [...boardState]
-            const newVal = !nextVal
+            // const newVal = !nextVal
             
-                tempArr[idx] = props.player == 'X' ? 'X' : 'O'
-                changeNext(prevVal => newVal)
-                changeState(prevList => tempArr)
-            
-            socket.emit('turn', { board: tempArr, moveBool: newVal});
+            tempArr[idx] = props.player == 'X' ? 'X' : 'O'
+            // changeNext(prevVal => newVal)
+            changeState(prevList => tempArr)
+            socket.emit('turn', { board: tempArr});
             canIt(prevVal => !prevVal)
             console.log("Move Sent")
             }
@@ -74,9 +77,9 @@ export function Board(props) {
             // console.log('Move Received')
             // console.log(data)
             const currentState = data.board
-            const moveState = data.moveBool
+            // const moveState = data.moveBool
             // console.log(currentState)
-            changeNext(prevVal => moveState)
+            // changeNext(prevVal => moveState)
             changeState(prevList => currentState)
             canIt(prevVal => !prevVal)
 
@@ -117,6 +120,7 @@ export function Board(props) {
             <>
             <Winner winner={winner}/>
             <button onClick={resetGame}>Play Again?</button>
+            <p1>(Loser Goes First)</p1>
             </>
             
             )
