@@ -33,3 +33,6 @@ Solution: Use restart function to ONLY reset board, instead of board and first-m
 
 Solution: Added a div element around the button, and added top padding to the div. I used stack overflow to search how to add padding-top OUTSIDE of a button border, but instead found a solution that involved wrapping the button in a div.
 
+3. On draw, user could not tell who had first turn
+
+Solution: Added functionality to Board.js so the application would tell player if it was their turn or the opponent. Used a boolean to decide whether it was current player's turn or opponent's turn, and then displayed correct message accordingly

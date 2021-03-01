@@ -32,23 +32,26 @@ export function Board(props) {
         
     // }
     
-    // useEffect(() => {
-    // socket.on('reset', (data) => {
-        
-    //     let ifReset = data.reset;
-    //     chngRstart(prev=>ifReset)
-        
-    //  }, []);
+
     
     
     function resetGame(){
         let temp = Array(9).fill(null)
         changeState(prevVal => temp)
+        socket.emit('reset', { board: temp});
         // let tempTurn = initialTurn
         // canIt(prevVal => tempTurn)
-        
-        
+    
     }
+    useEffect(() => {
+        socket.on('reset', (data) => {
+            
+            let temp = data.board
+            changeState(prev=>temp)
+
+
+            });
+         }, []);
 
     
     
@@ -113,7 +116,7 @@ export function Board(props) {
         
     }
     
-    
+    const currentTurn = canTurn ? 'Your Turn' : 'Opponent\'s Turn' //Used to display first player
     
     if(calculateWinner(boardState) != null){
         
@@ -128,11 +131,7 @@ export function Board(props) {
             </>
             
             )
-        // return (
-            
-        //     <h1> {calculateWinner(boardState)} WINS </h1>
-            
-        //     )
+
     }
     
     else if(boardIsFull()){
@@ -149,6 +148,8 @@ export function Board(props) {
     else{
         return (
             <>
+            <h3>{currentTurn}</h3>
+            
         <div class="board">
             
             {boardState.map((item, index) => <Box value={item} onClick={()=>onClickDiv(index)}/>)}
