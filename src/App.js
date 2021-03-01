@@ -72,7 +72,7 @@ function App() {
       <div class='wrapper-input'>
         <div>
         <input type='text' ref={inputUser} placeholder='username' required/>
-        <button onClick={onButtonClick}><h3>Log In</h3></button>
+        <div style={{paddingTop: 10}}><button onClick={onButtonClick}><h3>Log In</h3></button></div>
         </div>
       </div>
 

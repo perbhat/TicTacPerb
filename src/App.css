@@ -42,7 +42,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center !important;
   font-size: calc(10px + 2vmin);
   color: white;
 
@@ -68,5 +68,8 @@
   width: 50%;
   border-radius: 5px !important;
   
+}
+.wrapper-input h3{
+  color: white;
 }
 
