@@ -26,8 +26,10 @@
 
 ## Technical Issues:
 1. Restart function would not work. Board would show up for one player, but not the other (the other player would see the restart button), and would alternate each time a player selected restart.
+
 Solution: Use restart function to ONLY reset board, instead of board and first-move boolean. This way the loser would get a chance to go first, and both players would have to hit restart to start a new game. I used print statements and worked through my logic on paper to solve this issue.
 
 2. Padding would not appear between text box and button.
+
 Solution: Added a div element around the button, and added top padding to the div. I used stack overflow to search how to add padding-top OUTSIDE of a button border, but instead found a solution that involved wrapping the button in a div.
 
