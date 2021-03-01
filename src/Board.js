@@ -6,6 +6,8 @@ import { Box } from './Box.js'
 import { Winner } from './Winner.js'
 
 
+
+
 const socket = io();
 
 export function Board(props) {
@@ -119,6 +121,8 @@ export function Board(props) {
         return(
             <>
             <Winner winner={winner}/>
+    
+            
             <button onClick={resetGame}>Play Again?</button>
             <p1>(Loser Goes First)</p1>
             </>

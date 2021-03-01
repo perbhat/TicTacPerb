@@ -26,29 +26,31 @@ function App() {
   
   
   function onButtonClick(){
-    var copy = {...userMap}
-    const user = inputUser.current.value
-    if(copy.playerX == ''){
-      copy.playerX = user
-      updateUser(oldUser => 'X')
+    if(inputUser.current.value != ''){
+      var copy = {...userMap}
+      const user = inputUser.current.value
+      if(copy.playerX == ''){
+        copy.playerX = user
+        updateUser(oldUser => 'X')
+      }
+      else if(copy.playerO == ''){
+        copy.playerO = user
+         updateUser(oldUser => 'O')
+      }
+      else{
+        let specs = [...copy.spectators, user]
+        copy.spectators = specs
+        updateUser(oldUser => 's')
+      }
+      updateUsers(copy);
+      updateName(user)
+      
+      
+      
+      socket.emit('login', {users: copy});
+      console.log(copy);
+      console.log("emitted");
     }
-    else if(copy.playerO == ''){
-      copy.playerO = user
-       updateUser(oldUser => 'O')
-    }
-    else{
-      let specs = [...copy.spectators, user]
-      copy.spectators = specs
-      updateUser(oldUser => 's')
-    }
-    updateUsers(copy);
-    updateName(user)
-    
-    
-    
-    socket.emit('login', {users: copy});
-    console.log(copy);
-    console.log("emitted");
     
   };
   
@@ -67,10 +69,10 @@ function App() {
   
   if(thisUser == ''){
     return(
-      <div class='wrapper'>
+      <div class='wrapper-input'>
         <div>
-        <input type='text' ref={inputUser}/>
-        <button onClick={onButtonClick}>Set the user for this tab </button>
+        <input type='text' ref={inputUser} placeholder='username' required/>
+        <button onClick={onButtonClick}><h3>Log In</h3></button>
         </div>
       </div>
 
@@ -105,10 +107,10 @@ function App() {
           <h2>Spectators: </h2>
           
           {userMap.spectators.map((item, index) => (<h2>{ (index ? ', ': '') + item }</h2>))}
-          
           </div>
     
           <Board playerX={userMap.playerX} playerO={userMap.playerO} player={thisUser} />
+          
           
         </div>
       </div>
