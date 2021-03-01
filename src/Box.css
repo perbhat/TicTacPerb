@@ -1,0 +1,9 @@
+.box {
+  border: 3px solid white;
+  text-align: center !important;
+  line-height: 100px;
+  font-size: calc(10px + 2vmin) !important;
+  /*border-radius: 25px !important;*/
+  /*Shows the lines in the CSS grid */
+}
+

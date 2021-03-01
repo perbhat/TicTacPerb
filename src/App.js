@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+// import './Form.css'
 import { Board } from './Board.js';
 import React, {useState, useRef, useEffect} from 'react'
 import io from 'socket.io-client';
@@ -66,23 +67,27 @@ function App() {
   
   if(thisUser == ''){
     return(
-      <>
-      <input type='text' ref={inputUser}/>
-      <button onClick={onButtonClick}>Set the user for this tab </button>
-      </>
+      <div class='wrapper'>
+        <div>
+        <input type='text' ref={inputUser}/>
+        <button onClick={onButtonClick}>Set the user for this tab </button>
+        </div>
+      </div>
+
       )
     
   }
   
   else if(userMap.playerX == '' || userMap.playerO == ''){
     return(
-      
-      <>
-        <h3>PlayerX: {userMap.playerX}</h3>
-        <h3>PlayerO: {userMap.playerO}</h3>
-        <h3>Spectators:</h3>
-        {userMap.spectators.map((item) => <h3>{item}</h3>)}
-      </>
+      <div class='wrapper'>
+        <div>
+          <h3>PlayerX: {userMap.playerX}</h3>
+          <h3>PlayerO: {userMap.playerO}</h3>
+          <h3>Spectators:</h3>
+          {userMap.spectators.map((item) => <h3>{item}, </h3>)}
+        </div>
+      </div>
       ) 
   }
   
@@ -92,16 +97,20 @@ function App() {
     
         return (
   
-      
-      <div>
-        <h3>PlayerX: {userMap.playerX}</h3>
-        <h3>PlayerO: {userMap.playerO}</h3>
-        <h3>Spectators:</h3>
-        {userMap.spectators.map((item) => <h3>{item}</h3>)}
-        
-  
-        <Board playerX={userMap.playerX} playerO={userMap.playerO} player={thisUser} />
-        
+      <div class='wrapper-small'>
+        <div>
+          <h3>PlayerX: {userMap.playerX}</h3>
+          <h3>PlayerO: {userMap.playerO}</h3>
+          <div class='spec'>
+          <h2>Spectators: </h2>
+          
+          {userMap.spectators.map((item, index) => (<h2>{ (index ? ', ': '') + item }</h2>))}
+          
+          </div>
+    
+          <Board playerX={userMap.playerX} playerO={userMap.playerO} player={thisUser} />
+          
+        </div>
       </div>
       
    
