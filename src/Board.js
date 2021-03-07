@@ -14,33 +14,22 @@ export function Board(props) {
     
     const [boardState, changeState] = useState(Array(9).fill(null));
     
-    // const[nextVal, changeNext] = useState(true);
-    
     const playerX = props.playerX
     const playerO = props.playerO
     
     const initialTurn = props.player == 'X' ? true : false
     
-    const[canTurn, canIt] = useState(initialTurn)
+    const[canTurn, changeTurn] = useState(initialTurn)
 
     console.log(canTurn)
     
-    // const[restart, chngRstart] = useState(false)
-    
-    // function resetHelper(){
-    //     socket.emit('reset', { reset: true});
-        
-    // }
-    
 
     
     
-    function resetGame(){
+    function resetGame(){ //Resets board to empty array
         let temp = Array(9).fill(null)
         changeState(prevVal => temp)
         socket.emit('reset', { board: temp});
-        // let tempTurn = initialTurn
-        // canIt(prevVal => tempTurn)
     
     }
     useEffect(() => {
@@ -55,20 +44,17 @@ export function Board(props) {
 
     
     
-    function onClickDiv(idx){
-        if(boardState[idx] == null){
+    function onClickDiv(idx){ //What happens when one clicks a box
+        if(boardState[idx] == null){ //Make sure that the square is not already clicked before
             if(props.player == 's' || props.player == '' || !canTurn){
                 return
             }
     
             const tempArr = [...boardState]
-            // const newVal = !nextVal
-            
             tempArr[idx] = props.player == 'X' ? 'X' : 'O'
-            // changeNext(prevVal => newVal)
             changeState(prevList => tempArr)
             socket.emit('turn', { board: tempArr});
-            canIt(prevVal => !prevVal)
+            changeTurn(prevVal => !prevVal)
             console.log("Move Sent")
             }
         else{
@@ -79,19 +65,13 @@ export function Board(props) {
         
     useEffect(() => {
         socket.on('turn', (data) => {
-            // console.log('Move Received')
-            // console.log(data)
             const currentState = data.board
-            // const moveState = data.moveBool
-            // console.log(currentState)
-            // changeNext(prevVal => moveState)
             changeState(prevList => currentState)
             canIt(prevVal => !prevVal)
-
             });
          }, []);
          
-    function calculateWinner(squares) {
+    function calculateWinner(squares) { //Calculates the Winner
       const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -111,7 +91,7 @@ export function Board(props) {
       return null;
     }
     
-    function boardIsFull(){
+    function boardIsFull(){ //Returns true of false if every element is not equal to null (meaning board is full)
         return boardState.every(element => element !== null)
         
     }
@@ -136,7 +116,6 @@ export function Board(props) {
     
     else if(boardIsFull()){
         return (
-            
             <>
             <h1> DRAW </h1>
             <button onClick={resetGame}>Play Again?</button>
