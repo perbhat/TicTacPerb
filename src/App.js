@@ -47,7 +47,7 @@ function App() {
       
       
       
-      socket.emit('login', {users: copy});
+      socket.emit('login', {users: copy, currentUser: user});
       console.log(copy);
       console.log("emitted");
     }

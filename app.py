@@ -1,11 +1,29 @@
 import os
-from flask import Flask, send_from_directory, json, session
+from flask import Flask, send_from_directory, json
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 app = Flask(__name__, static_folder='./build/static')
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Point SQLAlchemy to your Heroku database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Gets rid of a warning
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+# IMPORTANT: This must be AFTER creating db variable to prevent
+# circular import issues
+import models
+db.create_all()
+
+
+
+
 
 socketio = SocketIO(
     app,
@@ -48,6 +66,23 @@ def on_update(data):
 def on_login(data):
     print("Something Happened")
     # print(#str(data))
+    
+    print(str(data))
+    print(data['currentUser'])
+    exists = bool(models.Player.query.filter_by(username=data['currentUser']).first())
+    if not exists:
+        new_user = models.Player(username=data['currentUser'], score=100)
+        db.session.add(new_user)
+        db.session.commit()
+    # all_players = models.Player.query.all()
+    # players = []
+    # for player in all_players:
+    #     players.append(player)
+    # print(players)
+    # socketio.emit('player_list', {'players':players})
+    
+    
+    
     socketio.emit('login', data, broadcast=True, include_self=False)
 
 
@@ -57,13 +92,32 @@ def on_reset(data):
     socketio.emit('reset', data, broadcast=True, include_self=False)
 
 
+# @socketio.on('join')
+# def on_join(data):
+
+
+
+if __name__ == "__main__":
 # Note that we don't call app.run anymore. We call socketio.run with app arg
-socketio.run(
-    app,
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-    debug=True
-)
+    socketio.run(
+        app,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+        debug=True,
+    )
+
+    
 
 
+# # Note that we don't call app.run anymore. We call socketio.run with app arg
+# socketio.run(
+#     app,
+#     host=os.getenv('IP', '0.0.0.0'),
+#     port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+#     debug=True
+# )
+
+
+
+# Note we need to add this line so we can import app in the python shell
 
