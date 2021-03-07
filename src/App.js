@@ -28,19 +28,23 @@ function App() {
   
   const [displayToggle, showLeaderBoard] = useState(false);
   function onLeaderBoard(){
-    if(displayToggle){
-      showLeaderBoard(prev=> !prev)
-      return(
-        <LeaderBoard data={leaderBoard}/>
-        )
-    }
+    // showLeaderBoard(prev=> !prev)
+    // if(displayToggle){
+    //   socket.emit('getleaderboard');
+    //   console.log('sent request to get board')
+    //   return(
+    //     <LeaderBoard data={leaderBoard}/>
+    //     )
+    // }
+
+    
+    
+    
   }
   
   useEffect(() => {
   socket.on('getleaderboard', (data) => {
-      console.log('login registered')
-      updateUsers(data.users);
-      console.log(data.users.spectators)
+      console.log('getting Leaderboard')
       console.log(data.players)
       updateLeaderBoard(prevBoard => data.players)
       });
@@ -138,9 +142,17 @@ function App() {
           </div>
     
           <Board playerX={userMap.playerX} playerO={userMap.playerO} player={thisUser} />
-          
+
           
         </div>
+        
+        
+        
+        <LeaderBoard data={leaderBoard}/>
+        
+        
+        
+        
       </div>
       
    

@@ -60,6 +60,33 @@ def on_chat(data): # data is whatever arg you pass in your emit call on client
 def on_update(data):
     print(str(data))
     socketio.emit('turn', data,  broadcast=True, include_self=False)
+
+@socketio.on('getleaderboard')
+def getleaderboard():
+    all_players = models.Player.query.all()
+    players = []
+    for player in all_players:
+        players.append([player.username, player.score])
+
+    players.sort(key=(lambda player: -player[1]))
+    socketio.emit('getleaderboard', {'players':players}, broadcast=True, include_self=True)
+    
+    
+    
+    
+@socketio.on('updateScore')
+def updateScore(data):
+    print(str(data))
+    player =  db.session.query(models.Player).get(data['user'])
+    player.score += int(data['score'])
+    db.session.commit()
+    print(player.score)
+    getleaderboard()
+    
+    
+    
+    
+    
     
     
 @socketio.on('login')
@@ -68,23 +95,15 @@ def on_login(data):
     # print(#str(data))
     
     print(str(data))
-    print(data['currentUser'])
+    # print(data['currentUser'])
     exists = bool(models.Player.query.filter_by(username=data['currentUser']).first())
     if not exists:
         new_user = models.Player(username=data['currentUser'], score=100)
         db.session.add(new_user)
         db.session.commit()
-    # all_players = models.Player.query.all()
-    # players = []
-    # for player in all_players:
-    #     players.append(player)
-    # print(players)
-    # socketio.emit('player_list', {'players':players})
-    
-    
-    
-    socketio.emit('login', data, broadcast=True, include_self=False)
 
+    socketio.emit('login', {'users': data['users']}, broadcast=True, include_self=True)
+    getleaderboard()
 
 @socketio.on('reset')
 def on_reset(data):
