@@ -27,20 +27,15 @@ function App() {
   
   
   const [displayToggle, showLeaderBoard] = useState(false);
-  function onLeaderBoard(){
-    // showLeaderBoard(prev=> !prev)
-    // if(displayToggle){
-    //   socket.emit('getleaderboard');
-    //   console.log('sent request to get board')
-    //   return(
-    //     <LeaderBoard data={leaderBoard}/>
-    //     )
-    // }
+  
+  function onLeaderClick(){
+    showLeaderBoard(prev => !prev)
+  }
 
     
     
     
-  }
+  
   
   useEffect(() => {
   socket.on('getleaderboard', (data) => {
@@ -88,8 +83,6 @@ function App() {
         console.log('login registered')
         updateUsers(data.users);
         console.log(data.users.spectators)
-        console.log(data.players)
-        updateLeaderBoard(prevBoard => data.players)
         });
      }, []);
      
@@ -104,8 +97,12 @@ function App() {
         <div>
         <input type='text' ref={inputUser} placeholder='username' required/>
         <div style={{paddingTop: 10}}><button onClick={onButtonClick}><h3>Log In</h3></button></div>
-        <div style={{paddingTop: 10}}><button onClick={onLeaderBoard}><h3>Leaderboard</h3></button></div>
         </div>
+      
+
+
+        
+        
       </div>
 
       )
@@ -121,6 +118,11 @@ function App() {
           <h3>Spectators:</h3>
           {userMap.spectators.map((item) => <h3>{item}, </h3>)}
         </div>
+        
+      <div style={{paddingTop: 10}}><button onClick={onLeaderClick}><h3>Leaderboard</h3></button></div>
+      {displayToggle && <LeaderBoard data={leaderBoard}/>}
+
+        
       </div>
       ) 
   }
@@ -145,10 +147,10 @@ function App() {
 
           
         </div>
+      <div style={{paddingTop: 10}}><button onClick={onLeaderClick}><h3>Leaderboard</h3></button></div>
+      {displayToggle && <LeaderBoard data={leaderBoard}/>}
         
         
-        
-        <LeaderBoard data={leaderBoard}/>
         
         
         
