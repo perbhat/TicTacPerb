@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-// import './Form.css'
 import { Board } from './Board.js';
 import React, {useState, useRef, useEffect} from 'react'
 import io from 'socket.io-client';
+import { LeaderBoard } from './Leaderboard.js';
 
 
 const socket = io();
@@ -19,9 +19,34 @@ function App() {
     spectators: []
   });
   
+  const [leaderBoard, updateLeaderBoard] = useState(null);
+  
   
   
   const inputUser = useRef(''); //Hook to take value from the textbox
+  
+  
+  const [displayToggle, showLeaderBoard] = useState(false);
+  function onLeaderBoard(){
+    if(displayToggle){
+      showLeaderBoard(prev=> !prev)
+      return(
+        <LeaderBoard data={leaderBoard}/>
+        )
+    }
+  }
+  
+  useEffect(() => {
+  socket.on('getleaderboard', (data) => {
+      console.log('login registered')
+      updateUsers(data.users);
+      console.log(data.users.spectators)
+      console.log(data.players)
+      updateLeaderBoard(prevBoard => data.players)
+      });
+   }, []);
+   
+  
   
   
   
@@ -59,8 +84,12 @@ function App() {
         console.log('login registered')
         updateUsers(data.users);
         console.log(data.users.spectators)
+        console.log(data.players)
+        updateLeaderBoard(prevBoard => data.players)
         });
      }, []);
+     
+     
      
      
   
@@ -71,6 +100,7 @@ function App() {
         <div>
         <input type='text' ref={inputUser} placeholder='username' required/>
         <div style={{paddingTop: 10}}><button onClick={onButtonClick}><h3>Log In</h3></button></div>
+        <div style={{paddingTop: 10}}><button onClick={onLeaderBoard}><h3>Leaderboard</h3></button></div>
         </div>
       </div>
 
