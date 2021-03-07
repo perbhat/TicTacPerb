@@ -67,7 +67,7 @@ export function Board(props) {
         socket.on('turn', (data) => {
             const currentState = data.board
             changeState(prevList => currentState)
-            canIt(prevVal => !prevVal)
+            changeTurn(prevVal => !prevVal)
             });
          }, []);
          
