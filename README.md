@@ -23,15 +23,17 @@
 ## Known Problems:
 1. Functionality is not as reliable when both players have same username.
 
-I would fix this issue by figuring out a way to make sure all usernames are unique in order to play the game
+I would fix this issue by figuring out a way to make sure all usernames are unique in order to play the game. This might involve comparing all the usernames, or setting constraints preventing usernames to log in if they are already present in the session.
 
-2. 
+2. If user leaves the middle of the game, it is not logged as a forefit.
+
+I would fix this issue by keeping a turn timer. Once the turn times out, the game is considered lost and the user scores are updated accordingly.
 
 ## Technical Issues:
 1. App would not deploy to heroku.
 
-Solution: Still solving
+Solution: Read the heroku log, and found that psycopg2 was not found in the error logs. Because of this, I updated my requirements.txt to add in psycopg2 and that solved the issue.
 
-2. Socket would emit to the other client, but not to the self
+2. Could not pass in current user to leaderboard to bold it.
 
-Solution: Read documentation to find exclude_self parameter, and set it to False to remedy the issue.
+Solution: used pring statements to trace code back to the username state, and figured out that my usestate was not updating. I found that I should pass it to both instances of leaderbord (before the board and after the board)

@@ -28,11 +28,13 @@ function App() {
   
   const [displayToggle, showLeaderBoard] = useState(false);
   
+  const u = thisUser == 'X'? userMap.playerX : userMap.playerO
+  
   function onLeaderClick(){
     showLeaderBoard(prev => !prev)
   }
 
-    
+     
     
     
   
@@ -49,10 +51,12 @@ function App() {
   
   
   
+  
   function onButtonClick(){ //Allows users to log into Application
     if(inputUser.current.value != ''){
       var copy = {...userMap}
       const user = inputUser.current.value
+
       if(copy.playerX == ''){
         copy.playerX = user
         updateUser(oldUser => 'X')
@@ -66,8 +70,10 @@ function App() {
         copy.spectators = specs
         updateUser(oldUser => 's')
       }
-      updateUsers(copy);
-      updateName(user)
+      updateUsers(prev=>copy);
+      updateName(prev=>user)
+      
+      
       
       
       
@@ -89,6 +95,9 @@ function App() {
      
      
      
+     
+     
+     
   
   
   if(thisUser == ''){
@@ -99,10 +108,6 @@ function App() {
         <div style={{paddingTop: 10}}><button onClick={onButtonClick}><h3>Log In</h3></button></div>
         </div>
       
-
-
-        
-        
       </div>
 
       )
@@ -120,7 +125,7 @@ function App() {
         </div>
         
       <div style={{paddingTop: 10}}><button onClick={onLeaderClick}><h3>Leaderboard</h3></button></div>
-      {displayToggle && <LeaderBoard data={leaderBoard}/>}
+      {displayToggle && <LeaderBoard thisPlayer={u} data={leaderBoard}/>}
 
         
       </div>
@@ -131,6 +136,7 @@ function App() {
   
   else{
     
+
         return (
   
       <div class='wrapper-small'>
@@ -148,7 +154,7 @@ function App() {
           
         </div>
       <div style={{paddingTop: 10}}><button onClick={onLeaderClick}><h3>Leaderboard</h3></button></div>
-      {displayToggle && <LeaderBoard data={leaderBoard}/>}
+      {displayToggle && <LeaderBoard thisPlayer={u} data={leaderBoard}/>}
         
         
         
