@@ -23,8 +23,6 @@ db.create_all()
 
 
 
-
-
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
