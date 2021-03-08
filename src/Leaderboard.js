@@ -6,7 +6,6 @@ import './Board.css';
 
 export function LeaderBoard(props){
     const leaderBoard = props.data
- 
         return(
             
             <>
@@ -18,7 +17,12 @@ export function LeaderBoard(props){
                 </thead>
                 <tbody>
                     <tr>
-                        {leaderBoard.map((player) => <tr><td>{player[0]}</td><td>{player[1]}</td></tr>)}
+                        {leaderBoard.map((player) =>
+                
+                        <tr><td>{player[0]}</td><td>{player[1]}</td></tr>
+
+                        
+                        )}
                     </tr>
                 </tbody>
             </table>
