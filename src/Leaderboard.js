@@ -1,7 +1,7 @@
 import React from 'react';
 import './Board.css';
 
-
+// Leaderboard component returns a table
 
 
 export function LeaderBoard(props){
