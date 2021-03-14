@@ -21,18 +21,19 @@
 
 
 ## Known Problems:
-1. Grid sometimes dislocates when certain moves are done
-2. Button is not centered under login textbox
+1. Functionality is not as reliable when both players have same username.
+
+I would fix this issue by figuring out a way to make sure all usernames are unique in order to play the game. This might involve comparing all the usernames, or setting constraints preventing usernames to log in if they are already present in the session.
+
+2. If user leaves the middle of the game, it is not logged as a forefit.
+
+I would fix this issue by keeping a turn timer. Once the turn times out, the game is considered lost and the user scores are updated accordingly.
 
 ## Technical Issues:
-1. Restart function would not work. Board would show up for one player, but not the other (the other player would see the restart button), and would alternate each time a player selected restart.
+1. App would not deploy to heroku.
 
-Solution: Use restart function to ONLY reset board, instead of board and first-move boolean. This way the loser would get a chance to go first, and both players would have to hit restart to start a new game. I used print statements and worked through my logic on paper to solve this issue.
+Solution: Read the heroku log, and found that psycopg2 was not found in the error logs. Because of this, I updated my requirements.txt to add in psycopg2 and that solved the issue.
 
-2. Padding would not appear between text box and button.
+2. Could not pass in current user to leaderboard to bold it.
 
-Solution: Added a div element around the button, and added top padding to the div. I used stack overflow to search how to add padding-top OUTSIDE of a button border, but instead found a solution that involved wrapping the button in a div.
-
-3. On draw, user could not tell who had first turn
-
-Solution: Added functionality to Board.js so the application would tell player if it was their turn or the opponent. Used a boolean to decide whether it was current player's turn or opponent's turn, and then displayed correct message accordingly
+Solution: used pring statements to trace code back to the username state, and figured out that my usestate was not updating. I found that I should pass it to both instances of leaderbord (before the board and after the board)

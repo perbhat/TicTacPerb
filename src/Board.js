@@ -18,10 +18,15 @@ export function Board(props) {
     const playerO = props.playerO
     
     const initialTurn = props.player == 'X' ? true : false
+    const thisPlayer = props.player == 'X' ? playerX : playerO
     
     const[canTurn, changeTurn] = useState(initialTurn)
+    
+    const winner = calculateWinner(boardState) == 'X' ? playerX : calculateWinner(boardState) == 'O' ? playerO : null
+    
 
     console.log(canTurn)
+    
     
 
     
@@ -41,6 +46,23 @@ export function Board(props) {
 
             });
          }, []);
+         
+         
+         
+         
+    useEffect(()=> {
+        
+        if(thisPlayer == winner){
+            socket.emit('updateScore', {user: thisPlayer, score: 1})
+        }
+        else if(winner != null && thisPlayer != winner){
+            socket.emit('updateScore', {user: thisPlayer, score: -1})
+        }
+        console.log('updatingScore')
+        
+        
+        
+    },[winner])
 
     
     
@@ -98,9 +120,15 @@ export function Board(props) {
     
     const currentTurn = canTurn ? 'Your Turn' : 'Opponent\'s Turn' //Used to display first player
     
+    
+    
     if(calculateWinner(boardState) != null){
         
-        const winner = calculateWinner(boardState) == 'X' ? playerX : playerO
+        
+        
+        
+        
+        
         return(
             <>
             <Winner winner={winner}/>
