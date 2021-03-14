@@ -1,11 +1,12 @@
 .board {
-	width: 350px; /* Total horizontal dimensions */
-	height: 350px; /* Total vertical dimensions */
-	display: grid; /* Enables CSS Grid */ 
-	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
-  	grid-template-rows: repeat(3, 1fr);
-  	border-radius: 10px;
-  	border: 10px solid white;/* Total vertical space broken into 3 rows */
+  width: 350px; /* Total horizontal dimensions */
+  height: 350px; /* Total vertical dimensions */
+  display: grid; /* Enables CSS Grid */
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(3, 1fr);
+  border-radius: 10px;
+  border: 10px solid white; /* Total vertical space broken into 3 rows */
 }
-
-
