@@ -7,15 +7,14 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-app = Flask(__name__, static_folder='./build/static')
-
+APP = Flask(__name__, static_folder='./build/static')
 
 # Point SQLAlchemy to your Heroku database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 # Gets rid of a warning
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(APP)
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
 import models
@@ -24,14 +23,14 @@ db.create_all()
 
 
 socketio = SocketIO(
-    app,
+    APP,
     cors_allowed_origins="*",
     json=json,
     manage_session=False
 )
 
-@app.route('/', defaults={"filename": "index.html"})
-@app.route('/<path:filename>')
+@APP.route('/', defaults={"filename": "index.html"})
+@APP.route('/<path:filename>')
 def index(filename):
     return send_from_directory('./build', filename)
 
@@ -45,19 +44,10 @@ def on_connect():
 def on_disconnect():
     print('User disconnected!')
 
-# When a client emits the event 'chat' to the server, this function is run
-# 'chat' is a custom event name that we just decided
-@socketio.on('chat')
-def on_chat(data): # data is whatever arg you pass in your emit call on client
-    print(str(data))
-    # This emits the 'chat' event from the server to all clients except for
-    # the client that emmitted the event that triggered this function
-    socketio.emit('chat',  data, broadcast=True, include_self=False)
-
 @socketio.on('turn')
 def on_update(data):
     print(str(data))
-    socketio.emit('turn', data,  broadcast=True, include_self=False)
+    socketio.emit('turn', data, broadcast=True, include_self=False)
 
 @socketio.on('getleaderboard')
 def getleaderboard():
@@ -69,9 +59,6 @@ def getleaderboard():
     players.sort(key=(lambda player: -player[1]))
     socketio.emit('getleaderboard', {'players':players}, broadcast=True, include_self=True)
     
-    
-    
-    
 @socketio.on('updateScore')
 def updateScore(data):
     print(str(data))
@@ -81,19 +68,10 @@ def updateScore(data):
     print(player.score)
     getleaderboard()
     
-    
-    
-    
-    
-    
-    
 @socketio.on('login')
 def on_login(data):
     print("Something Happened")
-    # print(#str(data))
-    
     print(str(data))
-    # print(data['currentUser'])
     exists = bool(models.Player.query.filter_by(username=data['currentUser']).first())
     if not exists:
         new_user = models.Player(username=data['currentUser'], score=100)
