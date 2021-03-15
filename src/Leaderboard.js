@@ -1,6 +1,6 @@
-import React from "react";
-import "./Board.css";
-import PropTypes from "prop-types";
+import React from 'react';
+import './Board.css';
+import PropTypes from 'prop-types';
 
 // Leaderboard component returns a table
 
@@ -18,23 +18,21 @@ export function LeaderBoard(props) {
         </thead>
         <tbody>
           <tr>
-            {leaderBoard.map((player) =>
-              myplayer === player[0] ? (
-                <tr>
-                  <td>
-                    <b>{player[0]}</b>
-                  </td>
-                  <td>
-                    <b>{player[1]}</b>
-                  </td>
-                </tr>
-              ) : (
-                <tr>
-                  <td>{player[0]}</td>
-                  <td>{player[1]}</td>
-                </tr>
-              )
-            )}
+            {leaderBoard.map((player) => (myplayer === player[0] ? (
+              <tr>
+                <td>
+                  <b>{player[0]}</b>
+                </td>
+                <td>
+                  <b>{player[1]}</b>
+                </td>
+              </tr>
+            ) : (
+              <tr>
+                <td>{player[0]}</td>
+                <td>{player[1]}</td>
+              </tr>
+            )))}
           </tr>
         </tbody>
       </table>

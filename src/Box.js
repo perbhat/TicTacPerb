@@ -1,6 +1,6 @@
-import React from "react";
-import "./Box.css";
-import PropTypes from "prop-types";
+import React from 'react';
+import './Box.css';
+import PropTypes from 'prop-types';
 
 export function Box(props) {
   const { onClick, value } = props;
@@ -22,6 +22,6 @@ Box.propTypes = {
   onClick: PropTypes.func.isRequired,
   value: PropTypes.string,
 };
-Box.defaultProps = { value: "" };
+Box.defaultProps = { value: '' };
 
 export default Box;
