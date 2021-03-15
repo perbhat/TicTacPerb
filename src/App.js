@@ -1,33 +1,33 @@
-import './App.css';
-import React, { useState, useRef, useEffect } from 'react';
-import io from 'socket.io-client';
-import { Board } from './Board';
-import { LeaderBoard } from './Leaderboard';
+import "./App.css";
+import React, { useState, useRef, useEffect } from "react";
+import io from "socket.io-client";
+import { Board } from "./Board";
+import { LeaderBoard } from "./Leaderboard";
 
 const socket = io();
 
 function App() {
-  const [thisUser, updateUser] = useState(''); // Tells whether player is X or O
+  const [thisUser, updateUser] = useState(""); // Tells whether player is X or O
   const [userMap, updateUsers] = useState({
-    playerX: '',
-    playerO: '',
+    playerX: "",
+    playerO: "",
     spectators: [],
   });
 
   const [leaderBoard, updateLeaderBoard] = useState(null);
   console.log(leaderBoard);
-  const inputUser = useRef(''); // Hook to take value from the textbox
+  const inputUser = useRef(""); // Hook to take value from the textbox
 
   const [displayToggle, showLeaderBoard] = useState(false);
 
-  const u = thisUser === 'X' ? userMap.playerX : userMap.playerO;
+  const u = thisUser === "X" ? userMap.playerX : userMap.playerO;
 
   function onLeaderClick() {
     showLeaderBoard((prev) => !prev);
   }
 
   useEffect(() => {
-    socket.on('getleaderboard', (data) => {
+    socket.on("getleaderboard", (data) => {
       // console.log('getting Leaderboard');
       // console.log(data.players);
       updateLeaderBoard(data.players);
@@ -36,35 +36,35 @@ function App() {
 
   function onButtonClick() {
     // Allows users to log into Application
-    if (inputUser.current.value !== '') {
+    if (inputUser.current.value !== "") {
       const copy = { ...userMap };
       const user = inputUser.current.value;
 
-      if (copy.playerX === '') {
+      if (copy.playerX === "") {
         copy.playerX = user;
-        updateUser('X');
-      } else if (copy.playerO === '') {
+        updateUser("X");
+      } else if (copy.playerO === "") {
         copy.playerO = user;
-        updateUser('O');
+        updateUser("O");
       } else {
         const specs = [...copy.spectators, user];
         copy.spectators = specs;
-        updateUser('s');
+        updateUser("s");
       }
       updateUsers(copy);
-      socket.emit('login', { users: copy, currentUser: user });
+      socket.emit("login", { users: copy, currentUser: user });
     }
   }
 
   useEffect(() => {
-    socket.on('login', (data) => {
-      console.log('login registered');
+    socket.on("login", (data) => {
+      console.log("login registered");
       updateUsers(data.users);
       console.log(data.users);
     });
   }, []);
 
-  if (thisUser === '') {
+  if (thisUser === "") {
     return (
       <div className="wrapper-input">
         <div>
@@ -77,7 +77,8 @@ function App() {
         </div>
       </div>
     );
-  } if (userMap.playerX === '' || userMap.playerO === '') {
+  }
+  if (userMap.playerX === "" || userMap.playerO === "") {
     return (
       <div className="wrapper">
         <div>
@@ -91,11 +92,7 @@ function App() {
           </h3>
           <h3>Spectators:</h3>
           {userMap.spectators.map((item) => (
-            <h3>
-              {item}
-              ,
-              {' '}
-            </h3>
+            <h3>{item}, </h3>
           ))}
         </div>
 
@@ -123,7 +120,7 @@ function App() {
           <h2>Spectators: </h2>
 
           {userMap.spectators.map((item, index) => (
-            <h2>{(index ? ', ' : '') + item}</h2>
+            <h2>{(index ? ", " : "") + item}</h2>
           ))}
         </div>
         <div data-testid="tictac" className="Board">

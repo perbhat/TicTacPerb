@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import './Board.css';
+import React, { useState, useEffect } from "react";
+import "./Board.css";
 
-import io from 'socket.io-client';
-import PropTypes from 'prop-types';
-import { Box } from './Box';
-import { Winner } from './Winner';
+import io from "socket.io-client";
+import PropTypes from "prop-types";
+import { Box } from "./Box";
+import { Winner } from "./Winner";
 
 const socket = io();
 
 function calculateWinner(squares) {
-// Calculates the Winner
+  // Calculates the Winner
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -22,11 +22,7 @@ function calculateWinner(squares) {
   ];
   for (let i = 0; i < lines.length; i += 1) {
     const [a, b, c] = lines[i];
-    if (
-      squares[a]
-      && squares[a] === squares[b]
-      && squares[a] === squares[c]
-    ) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
   }
@@ -38,16 +34,16 @@ export function Board(props) {
 
   const [boardState, changeState] = useState(Array(9).fill(null));
 
-  const initialTurn = player === 'X';
+  const initialTurn = player === "X";
 
-  const thisPlayer = player === 'X' ? playerX : playerO;
+  const thisPlayer = player === "X" ? playerX : playerO;
 
   const [canTurn, changeTurn] = useState(initialTurn);
 
   let winner = null;
-  if (calculateWinner(boardState) === 'X') {
+  if (calculateWinner(boardState) === "X") {
     winner = playerX;
-  } else if (calculateWinner(boardState) === 'O') {
+  } else if (calculateWinner(boardState) === "O") {
     winner = playerO;
   }
 
@@ -55,10 +51,10 @@ export function Board(props) {
     // Resets board to empty array
     const temp = Array(9).fill(null);
     changeState(temp);
-    socket.emit('reset', { board: temp });
+    socket.emit("reset", { board: temp });
   }
   useEffect(() => {
-    socket.on('reset', (data) => {
+    socket.on("reset", (data) => {
       const temp = data.board;
       changeState(temp);
     });
@@ -66,9 +62,9 @@ export function Board(props) {
 
   useEffect(() => {
     if (thisPlayer === winner) {
-      socket.emit('update_score', { user: thisPlayer, score: 1 });
+      socket.emit("update_score", { user: thisPlayer, score: 1 });
     } else if (winner !== null && thisPlayer !== winner) {
-      socket.emit('update_score', { user: thisPlayer, score: -1 });
+      socket.emit("update_score", { user: thisPlayer, score: -1 });
     }
   }, [winner]);
 
@@ -76,20 +72,20 @@ export function Board(props) {
     // What happens when one clicks a box
     if (boardState[idx] === null) {
       // Make sure that the square is not already clicked before
-      if (props.player === 's' || player === '' || !canTurn) {
+      if (props.player === "s" || player === "" || !canTurn) {
         return;
       }
 
       const tempArr = [...boardState];
-      tempArr[idx] = player === 'X' ? 'X' : 'O';
+      tempArr[idx] = player === "X" ? "X" : "O";
       changeState(tempArr);
-      socket.emit('turn', { board: tempArr });
+      socket.emit("turn", { board: tempArr });
       // changeTurn((prevVal) => !prevVal);
     }
   }
 
   useEffect(() => {
-    socket.on('turn', (data) => {
+    socket.on("turn", (data) => {
       const currentState = data.board;
       changeState(currentState);
       changeTurn((c) => !c);
@@ -101,22 +97,27 @@ export function Board(props) {
     return boardState.every((element) => element !== null);
   }
 
-  const currentTurn = canTurn ? 'Your Turn' : "Opponent's Turn"; // Used to display first player
+  const currentTurn = canTurn ? "Your Turn" : "Opponent's Turn"; // Used to display first player
 
   if (calculateWinner(boardState) != null) {
     return (
       <>
         <Winner winner={winner} />
 
-        <button type="button" onClick={resetGame}>Play Again?</button>
+        <button type="button" onClick={resetGame}>
+          Play Again?
+        </button>
         <p1>(Loser Goes First)</p1>
       </>
     );
-  } if (boardIsFull()) {
+  }
+  if (boardIsFull()) {
     return (
       <>
         <h1> DRAW </h1>
-        <button type="button" onClick={resetGame}>Play Again?</button>
+        <button type="button" onClick={resetGame}>
+          Play Again?
+        </button>
       </>
     );
   }
