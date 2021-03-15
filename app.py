@@ -95,7 +95,7 @@ def on_reset(data):
 if __name__ == "__main__":
 # Note that we don't call app.run anymore. We call socketio.run with app arg
     socketio.run(
-        app,
+        APP,
         host=os.getenv('IP', '0.0.0.0'),
         port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
         debug=True,
