@@ -62,8 +62,8 @@ def getleaderboard():
     SOCKETIO.emit('getleaderboard', {'players': players},
                   broadcast=True,
                   include_self=True)
-                  
 def acquire_leaderboard():
+    """Helper function to get leaderboard"""
     all_players = models.Player.query.all()
     players = []
     for player in all_players:
@@ -76,11 +76,10 @@ def update_score(data):
     """Occurs when user wins"""
     print(str(data))
     player = DB.session.query(models.Player).get(data['user'])
-    player.score = add_score(player.score, int(data['score'])) 
+    player.score = add_score(player.score, int(data['score']))
     DB.session.commit()
     print(player.score)
     getleaderboard()
-    
 def add_score(score, number):
     """adds value to the player score"""
     return score + number
@@ -101,6 +100,7 @@ def on_login(data):
     getleaderboard()
 
 def add_user(user):
+    """Helper function to add a user into database"""
     new_user = models.Player(username=user, score=100)
     DB.session.add(new_user)
     DB.session.commit()

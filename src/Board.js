@@ -39,8 +39,7 @@ export function Board(props) {
   const [boardState, changeState] = useState(Array(9).fill(null));
 
   const initialTurn = player === 'X';
-  console.log(initialTurn);
-  console.log(player);
+
   const thisPlayer = player === 'X' ? playerX : playerO;
 
   const [canTurn, changeTurn] = useState(initialTurn);
