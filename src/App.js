@@ -126,12 +126,13 @@ function App() {
             <h2>{(index ? ', ' : '') + item}</h2>
           ))}
         </div>
-
-        <Board
-          playerX={userMap.playerX}
-          playerO={userMap.playerO}
-          player={thisUser}
-        />
+        <div data-testid="tictac" className="Board">
+          <Board
+            playerX={userMap.playerX}
+            playerO={userMap.playerO}
+            player={thisUser}
+          />
+        </div>
       </div>
       <div style={{ paddingTop: 10 }}>
         <button type="button" onClick={onLeaderClick}>

@@ -52,20 +52,23 @@ def on_update(data):
     """Occurs when user does a turn"""
     print(str(data))
     SOCKETIO.emit('turn', data, broadcast=True, include_self=True)
-
+    return data
 
 @SOCKETIO.on('getleaderboard')
 def getleaderboard():
     """Occurs when user wants to see leaderboard"""
-    all_players = models.Player.query.all()
-    players = []
-    for player in all_players:
-        players.append([player.username, player.score])
-
+    players = acquire_leaderboard()
     players.sort(key=(lambda player: -player[1]))
     SOCKETIO.emit('getleaderboard', {'players': players},
                   broadcast=True,
                   include_self=True)
+                  
+def acquire_leaderboard():
+    all_players = models.Player.query.all()
+    players = []
+    for player in all_players:
+        players.append([player.username, player.score])
+    return players
 
 
 @SOCKETIO.on('update_score')
@@ -73,10 +76,14 @@ def update_score(data):
     """Occurs when user wins"""
     print(str(data))
     player = DB.session.query(models.Player).get(data['user'])
-    player.score += int(data['score'])
+    player.score = add_score(player.score, int(data['score'])) 
     DB.session.commit()
     print(player.score)
     getleaderboard()
+    
+def add_score(score, number):
+    """adds value to the player score"""
+    return score + number
 
 
 @SOCKETIO.on('login')
@@ -87,14 +94,22 @@ def on_login(data):
     exists = bool(
         models.Player.query.filter_by(username=data['currentUser']).first())
     if not exists:
-        new_user = models.Player(username=data['currentUser'], score=100)
-        DB.session.add(new_user)
-        DB.session.commit()
-
+        users = add_user(data['currentUser'])
     SOCKETIO.emit('login', {'users': data['users']},
                   broadcast=True,
                   include_self=True)
     getleaderboard()
+
+def add_user(user):
+    new_user = models.Player(username=user, score=100)
+    DB.session.add(new_user)
+    DB.session.commit()
+    all_players = models.Player.query.all()
+    users = []
+    for player in all_players:
+        users.append(player.username)
+    return users
+
 
 
 @SOCKETIO.on('reset')
