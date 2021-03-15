@@ -87,10 +87,19 @@ class AddScoreTestCase(unittest.TestCase):
         ]
     def test_add_score(self):
         for test in self.success_test_params:
+            print("Original")
+            print(test[SCORE_INPUT])
+            print("Add")
+            print(test[ADD_SCORE])
             actual_result = add_score(test[SCORE_INPUT], test[ADD_SCORE])
+            print("Result")
+            print(actual_result)
             expected_result = test[EXPECTED_OUTPUT]
+            print("Expected")
+            print(expected_result)
             self.assertEqual(test[SCORE_INPUT], expected_result-test[ADD_SCORE])
             self.assertEqual(actual_result, expected_result)
+            print(True)
 
         
 

@@ -54,6 +54,7 @@ def on_update(data):
     SOCKETIO.emit('turn', data, broadcast=True, include_self=True)
     return data
 
+
 @SOCKETIO.on('getleaderboard')
 def getleaderboard():
     """Occurs when user wants to see leaderboard"""
@@ -62,6 +63,8 @@ def getleaderboard():
     SOCKETIO.emit('getleaderboard', {'players': players},
                   broadcast=True,
                   include_self=True)
+
+
 def acquire_leaderboard():
     """Helper function to get leaderboard"""
     all_players = models.Player.query.all()
@@ -80,6 +83,8 @@ def update_score(data):
     DB.session.commit()
     print(player.score)
     getleaderboard()
+
+
 def add_score(score, number):
     """adds value to the player score"""
     return score + number
@@ -98,6 +103,8 @@ def on_login(data):
                   broadcast=True,
                   include_self=True)
     getleaderboard()
+    return users
+
 
 def add_user(user):
     """Helper function to add a user into database"""
@@ -109,7 +116,6 @@ def add_user(user):
     for player in all_players:
         users.append(player.username)
     return users
-
 
 
 @SOCKETIO.on('reset')
