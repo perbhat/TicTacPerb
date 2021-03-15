@@ -29,6 +29,9 @@ test('BoardD does not appear if only one user is logged in', ()=> {
     const enterUsername = screen.getByPlaceholderText('username');
     fireEvent.change(enterUsername, { target: { value: 'perbhat' }});
     fireEvent.click(loginButtonElement);
+    expect(loginButtonElement).not.toBeInTheDocument();
     const board = screen.queryByTestId('tictacboard')
+    const leaderBoardButton = screen.getByText('Leaderboard');
     expect(board).not.toBeInTheDocument();
+    expect(leaderBoardButton).toBeInTheDocument()
 });
